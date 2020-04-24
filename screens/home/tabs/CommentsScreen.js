@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: "ubuntu-regular",
   },
   txtInput: {
     width: "70%",
@@ -126,6 +127,8 @@ const styles = StyleSheet.create({
   },
   text: { marginLeft: 80 },
   headtext: {
+    fontFamily: "ubuntu-bold",
+
     fontWeight: "bold",
   },
 });

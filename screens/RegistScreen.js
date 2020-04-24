@@ -18,7 +18,8 @@ import { registerRootComponent } from "expo";
 import { auth, storage } from "../firebase/config";
 // import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";
+// import * as Permissions from "expo-permissions";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialState = {
   email: "",
@@ -30,14 +31,17 @@ const initialState = {
 export const RegistScreen = () => {
   const [textValue, setTextValue] = useState(initialState);
   const [avatar, setAvatar] = useState("");
+  const dispatch = useDispatch();
+  const { userId, userName, userAvatar } = useSelector((state) => state.user);
 
   const registerUser = async () => {
-    const { email, password, userName } = textValue;
+    const { email, password, userNameIn } = textValue;
     const avatarUrl = await handleUpload(avatar);
+    const currentUser = await auth.currentUser;
     try {
       const user = await auth.createUserWithEmailAndPassword(email, password);
       await user.user.updateProfile({
-        displayName: userName,
+        displayName: userNameIn,
         photoURL: avatarUrl,
       });
       // await console.log("user-----------------------", user);
@@ -45,6 +49,14 @@ export const RegistScreen = () => {
       console.log(error);
       Alert.alert(error);
     }
+    await dispatch({
+      type: "CURRENT_USER",
+      payload: {
+        userName: userNameIn,
+        userId: currentUser.uid,
+        userPhoto: avatarUrl,
+      },
+    });
   };
   const photoUser = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -112,9 +124,9 @@ export const RegistScreen = () => {
             style={styles.txtInput}
             placeholder="User Name"
             onChangeText={(value) =>
-              setTextValue({ ...textValue, userName: value })
+              setTextValue({ ...textValue, userNameIn: value })
             }
-            value={textValue.userName}
+            value={textValue.userNameIn}
           />
           <Text>Email</Text>
           <TextInput
@@ -149,6 +161,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: "ubuntu-regular",
   },
   txtInput: {
     width: "70%",

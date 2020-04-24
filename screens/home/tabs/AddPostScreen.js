@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: "ubuntu-regular",
   },
   txtInput: {
     width: "70%",

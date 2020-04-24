@@ -62,6 +62,8 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    fontFamily: "ubuntu-regular",
+
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

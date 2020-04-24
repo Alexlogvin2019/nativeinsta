@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     alignItems: "center",
     justifyContent: "center",
+    fontFamily: "ubuntu-regular",
   },
   like: {
     borderWidth: 1,
@@ -148,6 +149,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   textName: {
+    fontFamily: "ubuntu-bold",
+
     textAlign: "left",
     paddingLeft: 20,
     paddingTop: 15,

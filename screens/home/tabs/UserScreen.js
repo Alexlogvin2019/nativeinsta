@@ -72,7 +72,6 @@ export const UserScreen = () => {
         >
           Hello, {userName}
         </Text>
-        {console.log("userAvatar1", userAvatar)}
 
         <Image
           style={{
@@ -111,8 +110,6 @@ export const UserScreen = () => {
                   height: 100,
                 }}
               >
-                {console.log("userAvatar2", userAvatar)}
-
                 <Image
                   style={{
                     position: "absolute",
@@ -123,7 +120,9 @@ export const UserScreen = () => {
                     marginBottom: 30,
                   }}
                   source={{
-                    uri: userAvatar,
+                    uri: userAvatar
+                      ? userAvatar
+                      : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffortnitenews.com%2Fcontent%2Fimages%2F2018%2F11%2Fdefault.png&f=1&nofb=1",
                   }}
                 />
                 <Text style={styles.textName}>{item.userName}</Text>
@@ -159,6 +158,8 @@ export const UserScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    fontFamily: "ubuntu-regular",
+
     flex: 1,
     paddingTop: 40,
     backgroundColor: "grey",
@@ -187,6 +188,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   textName: {
+    fontFamily: "ubuntu-bold",
+
     textAlign: "left",
     paddingLeft: 20,
     paddingTop: 15,

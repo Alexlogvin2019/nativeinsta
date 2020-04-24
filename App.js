@@ -8,11 +8,21 @@ import { LoginScreen } from "./screens/LoginScreen";
 import { HomeScreen } from "./screens/home/HomeScreen";
 import { auth } from "./firebase/config";
 import { store } from "./redux/store";
+import { AppLoading } from "expo";
+import * as Font from "expo-font";
 
 const Stack = createStackNavigator();
 
+async function loadAppAplication() {
+  await Font.loadAsync({
+    "ubuntu-regular": require("./assets/fonts/Ubuntu-Regular.ttf"),
+    "ubuntu-bold": require("./assets/fonts/Ubuntu-Bold.ttf"),
+  });
+}
+
 export default function App() {
   const [isAuth, setIsAuth] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   let content = (
     <Stack.Navigator>
@@ -75,7 +85,22 @@ export default function App() {
   console.log("isAuth", isAuth);
   const routing = useRoute(isAuth);
 
+  if (!isReady) {
+    return (
+      <AppLoading
+        startAsync={loadAppAplication}
+        onError={(err) => console.log(err)}
+        onFinish={() => setIsReady(true)}
+      />
+    );
+  }
+
   return (
+    //     <Login />
+    //   );
+    // }
+
+    //   return (
     <Provider store={store}>
       <NavigationContainer>{routing}</NavigationContainer>
     </Provider>
