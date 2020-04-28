@@ -14,6 +14,7 @@ import {
 } from "react-native";
 
 import { auth } from "../firebase/config";
+import { useDispatch } from "react-redux";
 
 const initialState = {
   email: "",
@@ -22,6 +23,7 @@ const initialState = {
 
 export const LoginScreen = ({ navigation, route }) => {
   const [textValue, setTextValue] = useState(initialState);
+  const dispatch = useDispatch();
 
   const loginUser = async () => {
     const { email, password } = textValue;
@@ -29,6 +31,16 @@ export const LoginScreen = ({ navigation, route }) => {
     console.log("password", password);
     try {
       await auth.signInWithEmailAndPassword(email, password);
+      const currentUser = await auth.currentUser;
+      console.log("current LoginScreen", currentUser);
+      await dispatch({
+        type: "CURRENT_USER",
+        payload: {
+          userName: currentUser.displayName,
+          userId: currentUser.uid,
+          userPhoto: currentUser.photoURL,
+        },
+      });
     } catch (error) {
       console.log(error);
       Alert.alert(error);

@@ -13,13 +13,12 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { registerRootComponent } from "expo";
+
 import { auth, storage } from "../firebase/config";
-// import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
 import * as ImagePicker from "expo-image-picker";
-// import * as Permissions from "expo-permissions";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useDispatch } from "react-redux";
 
 const initialState = {
   email: "",
@@ -32,31 +31,31 @@ export const RegistScreen = () => {
   const [textValue, setTextValue] = useState(initialState);
   const [avatar, setAvatar] = useState("");
   const dispatch = useDispatch();
-  const { userId, userName, userAvatar } = useSelector((state) => state.user);
 
   const registerUser = async () => {
     const { email, password, userNameIn } = textValue;
     const avatarUrl = await handleUpload(avatar);
-    const currentUser = await auth.currentUser;
     try {
       const user = await auth.createUserWithEmailAndPassword(email, password);
       await user.user.updateProfile({
         displayName: userNameIn,
         photoURL: avatarUrl,
       });
-      // await console.log("user-----------------------", user);
+
+      const currentUser = await auth.currentUser;
+      console.log("current registerScreen", currentUser);
+      await dispatch({
+        type: "CURRENT_USER",
+        payload: {
+          userName: currentUser.displayName,
+          userId: currentUser.uid,
+          userPhoto: currentUser.photoURL,
+        },
+      });
     } catch (error) {
       console.log(error);
       Alert.alert(error);
     }
-    await dispatch({
-      type: "CURRENT_USER",
-      payload: {
-        userName: userNameIn,
-        userId: currentUser.uid,
-        userPhoto: avatarUrl,
-      },
-    });
   };
   const photoUser = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,7 +64,7 @@ export const RegistScreen = () => {
       aspect: [4, 3],
       quality: 1,
     });
-    // console.log("result", result);
+
     await setAvatar(result.uri);
   };
 
@@ -101,10 +100,6 @@ export const RegistScreen = () => {
                   borderRadius: 50,
                   marginBottom: 30,
                 }}
-                // source={{ require("../image/instagram_gradient.png"
-                // uri:
-                //   "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffortnitenews.com%2Fcontent%2Fimages%2F2018%2F11%2Fdefault.png&f=1&nofb=1",
-                // }}
                 source={require("../image/ava.png")}
               />
             ) : (
@@ -158,6 +153,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

@@ -16,32 +16,32 @@ export const UserScreen = () => {
     dispatch({ type: "USER_SIGNOUT" });
   };
 
-  const currentUser = async () => {
-    const currentUser = await auth.currentUser;
-    // console.log("currentUser", currentUser);
-    await dispatch({
-      type: "CURRENT_USER",
-      payload: {
-        userName: currentUser.displayName,
-        userId: currentUser.uid,
-        userPhoto: currentUser.photoURL,
-      },
-    });
-  };
+  // const currentUser = async () => {
+  //   const currentUser = await auth.currentUser;
+  //   // console.log("currentUser", currentUser);
+  //   await dispatch({
+  //     type: "CURRENT_USER",
+  //     payload: {
+  //       userName: currentUser.displayName,
+  //       userId: currentUser.uid,
+  //       userPhoto: currentUser.photoURL,
+  //     },
+  //   });
+  // };
 
   const getCollection = async () => {
     await firestore
       .collection("test")
       .where("userId", "==", userId)
       .onSnapshot((data) => setAllPosts(data.docs.map((doc) => doc.data())));
-
+    // await currentUser();
     console.log("userId", userId);
   };
 
-  useEffect(() => {
-    currentUser();
-    console.log("currentUser", currentUser);
-  }, []);
+  // useEffect(() => {
+  //   currentUser();
+  //   console.log("currentUser", currentUser);
+  // }, []);
 
   useEffect(() => {
     getCollection();
